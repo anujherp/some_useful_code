@@ -21,7 +21,7 @@ match_tree_asw <- asw_sync(query = tree_species$binomial, asw = asw_full, intera
 synonym_report(match_tree_asw, verbose = F) # this shows me the report and lists any issues during the process.
 
 ## I then save the matched species dataframe and manually resolve the issues.
-write_csv(match_tree_asw, file.path(wd$data,"match_tree_asw.csv"))
+## write_csv(match_tree_asw, file.path(wd$data,"match_tree_asw.csv"))
 match_tree_asw <- read_csv(file.path(wd$data, "match_tree_asw.csv"))
 
 ## Once I matched all species tips to a valid ASW species name, I will remove any duplicates or  invalid species.
@@ -95,3 +95,5 @@ check_genus_monophyly <- function(tree, verbose = TRUE) {
 
 # Using the function
 genus_monophyly_report <- check_genus_monophyly(asw_frog_tree)
+genus_monophyly_report <- left_join(genus_monophyly_report, asw, by=c("Genus" = "genus")) %>%
+  select(family, Genus:Note) %>% distinct(Genus, .keep_all = T)
